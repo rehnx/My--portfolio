@@ -236,16 +236,21 @@ window.addEventListener('resize', () => {
 
 lenis.on('scroll', () => {
   const scrollY = window.scrollY;
-  // Dissolve over the first 120vh of scroll
-  const maxDissolveScroll = window.innerHeight * 1.5;
-  const p = Math.min(1.0, scrollY / maxDissolveScroll);
+  // Overlay text scrolls up completely over the first 45vh
+  const maxTextScroll = window.innerHeight * 0.45;
+  const textP = Math.min(1.0, scrollY / maxTextScroll);
+
+  // Dissolve effect starts AFTER the text has finished scrolling up (around 45vh)
+  const dissolveStart = window.innerHeight * 0.75;
+  const dissolveDuration = window.innerHeight * 0.65;
+  const p = Math.max(0, Math.min(1.0, (scrollY - dissolveStart) / dissolveDuration));
 
   if (material1) {
     material1.uniforms.uDissolve.value = p;
     const grayscaleProgress = Math.min(1.0, p / .4);
-    material1.uniforms.uGrayscale.value = grayscaleProgress
-    material1.uniforms.uEdgeIntensity.value = p * .5
-    material1.uniforms.uEdgeBrightness.value = 1.0 - p
+    material1.uniforms.uGrayscale.value = grayscaleProgress;
+    material1.uniforms.uEdgeIntensity.value = p * .5;
+    material1.uniforms.uEdgeBrightness.value = 1.0 - p;
 
     // Make fully transparent so it allows clicking behind properly just in case
     // Though pointer-events: none takes care of clicks, hiding when done is good.
@@ -253,6 +258,30 @@ lenis.on('scroll', () => {
       container1.style.display = 'none';
     } else {
       container1.style.display = 'block';
+    }
+  }
+
+  const scrollLine = document.querySelector('.scroll-line');
+  if (scrollLine) {
+    // Fade out extremely fast (almost instantly) when the photo starts dissolving
+    const opacityP = p > 0 ? Math.max(0, 1 - (p * 15)) : 1;
+    // Removed display: none and transform overrides to prevent layout shift
+    scrollLine.style.setProperty('opacity', opacityP, 'important');
+    scrollLine.style.pointerEvents = opacityP >= 0.5 ? 'auto' : 'none';
+  }
+
+  const landingOverlay = document.querySelector('.landing-overlay');
+  if (landingOverlay) {
+    // Scroll the overlay up like it's a physical sheet over the photo at exactly scroll speed
+    landingOverlay.style.transform = `translateY(-${scrollY}px)`;
+
+    // We fade it out directly relative to textP, so it vanishes safely after scrolling out
+    landingOverlay.style.opacity = Math.max(0, 1 - textP);
+
+    if (textP >= 1.0) {
+      landingOverlay.style.display = 'none';
+    } else {
+      landingOverlay.style.display = 'flex';
     }
   }
 })
@@ -272,3 +301,53 @@ function raf(time) {
 }
 
 requestAnimationFrame(raf);
+
+// Contact form handling with hidden email
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = contactForm.querySelector('button[type="submit"]');
+    const originalText = btn.innerHTML;
+
+    btn.innerHTML = 'Sending...';
+
+    // Decode the base64 hidden email
+    // "pathanrehan4679@gmail.com" -> btoa("pathanrehan4679@gmail.com") -> "cGF0aGFucmVoYW40Njc5QGdtYWlsLmNvbQ=="
+    const hiddenEmail = atob('cGF0aGFucmVoYW40Njc5QGdtYWlsLmNvbQ==');
+
+    const name = document.getElementById('cName').value;
+    const email = document.getElementById('cEmail').value;
+    const message = document.getElementById('cMessage').value;
+
+    try {
+      const response = await fetch(`https://formsubmit.co/ajax/${hiddenEmail}`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          message: message,
+          _subject: `New Portfolio Message from ${name}`
+        })
+      });
+
+      if (response.ok) {
+        btn.innerHTML = 'Message Sent! ✓';
+        contactForm.reset();
+      } else {
+        throw new Error('Server error');
+      }
+    } catch (error) {
+      btn.innerHTML = 'Failed to Send ✕';
+      console.error('Error sending message:', error);
+    }
+
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+    }, 4000);
+  });
+}
