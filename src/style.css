@@ -1129,20 +1129,27 @@ footer b {
   }
 
   .hero-scroll-wrapper {
-    height: auto !important;
+    height: 300vh !important;
+    /* Gave plenty of stasis after the effect concludes */
+    position: relative;
   }
 
   .hero-sticky-container {
-    height: auto !important;
-    position: relative !important;
-    overflow: visible !important;
+    height: 100vh !important;
+    position: sticky !important;
+    top: 0;
+    overflow: hidden !important;
   }
 
   #hero {
     grid-template-columns: 1fr;
     text-align: center;
-    padding: 8rem 2rem 4rem;
+    padding: 9rem 1.5rem 3rem;
+    /* Increased top padding to avoid nav overlap */
     min-height: 100vh;
+    background-position: 40% center;
+    /* Shifted background image for better mobile visibility */
+    background-size: cover;
   }
 
   #hero::after {
@@ -1188,18 +1195,33 @@ footer b {
 @media (max-width: 768px) {
   nav {
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.2rem;
+    /* Increased gap to separate logo from links */
     padding: 1rem;
+    height: auto;
+    align-items: center;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    margin-bottom: 0.2rem;
   }
 
   .nav-links {
-    gap: 1rem;
+    gap: 0.8rem;
     flex-wrap: wrap;
     justify-content: center;
+    width: 100%;
   }
 
   .nav-links a {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+  }
+
+  .nav-links a:first-child {
+    display: none;
+    /* Remove "Effect" link on mobile */
   }
 
   .panel {
@@ -1222,7 +1244,17 @@ footer b {
   }
 
   .hero-name {
-    font-size: 3.5rem;
+    font-size: 3rem;
+  }
+
+  #languages {
+    background-position: 70% center;
+    background-attachment: scroll;
+  }
+
+  #contact {
+    background-position: 30% center;
+    background-attachment: scroll;
   }
 
   .lang-grid {
