@@ -1110,6 +1110,36 @@ footer b {
   width: 100%;
 }
 
+/* ── HERO LAYOUT DEFAULTS ── */
+.hero-content,
+.hero-mobile-header,
+.hero-title-area {
+  display: contents;
+}
+
+#hero {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  align-items: center;
+  gap: 2rem;
+}
+
+.hero-tag,
+.hero-name,
+.hero-role,
+.hero-desc,
+.ctas {
+  grid-column: 1;
+}
+
+.hero-photo {
+  grid-column: 2;
+  grid-row: 1 / 20;
+  /* Ensure it stays on the right */
+  display: flex;
+  justify-content: center;
+}
+
 /* ═══════════════════════════════
    RESPONSIVE DESIGN (MEDIA QUERIES)
 ═══════════════════════════════ */
@@ -1142,14 +1172,86 @@ footer b {
   }
 
   #hero {
-    grid-template-columns: 1fr;
+    display: flex !important;
+    flex-direction: column !important;
     text-align: center;
-    padding: 9rem 1.5rem 3rem;
-    /* Increased top padding to avoid nav overlap */
+    padding: 10rem 1.5rem 4rem !important;
     min-height: 100vh;
     background-position: 40% center;
-    /* Shifted background image for better mobile visibility */
     background-size: cover;
+  }
+
+  .hero-content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100%;
+  }
+
+  .hero-mobile-header {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 1.5rem !important;
+    margin-bottom: 2.5rem !important;
+    width: 100%;
+  }
+
+  .hero-title-area {
+    display: flex !important;
+    flex-direction: column !important;
+    text-align: left !important;
+    flex: 1;
+    max-width: 200px;
+  }
+
+  .hero-photo {
+    display: block !important;
+    flex-shrink: 0;
+  }
+
+  .photo-frame {
+    width: 130px !important;
+    height: 130px !important;
+  }
+
+  .hero-tag {
+    margin-bottom: 0.4rem !important;
+    font-size: 0.55rem !important;
+    width: fit-content;
+    padding: 0.2rem 0.6rem !important;
+  }
+
+  .hero-name {
+    font-size: 2.1rem !important;
+    line-height: 1.1 !important;
+    white-space: nowrap;
+  }
+
+  .hero-name .yl {
+    display: inline !important;
+    /* Keep on same line if possible on mobile */
+    -webkit-text-stroke: 1px var(--yellow);
+  }
+
+  .hero-role {
+    text-align: center !important;
+    margin-top: 0 !important;
+    margin-bottom: 1.5rem !important;
+    font-size: 0.85rem !important;
+  }
+
+  .hero-desc {
+    text-align: center !important;
+    margin: 0 auto 2.5rem !important;
+    font-size: 0.85rem !important;
+    max-width: 320px !important;
+  }
+
+  .ctas {
+    justify-content: center !important;
+    margin-top: 0 !important;
   }
 
   #hero::after {
