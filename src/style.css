@@ -442,7 +442,8 @@ nav {
 /* scroll indicator */
 .scroll-line {
   position: absolute;
-  top: 3.8rem;
+  bottom: 2.5rem;
+  /* Move to bottom instead of top */
   display: flex;
   align-items: center;
   gap: .9rem;
@@ -450,8 +451,10 @@ nav {
   letter-spacing: .18em;
   left: 1rem;
   text-transform: uppercase;
-  color: var(--black);
-  z-index: 10000;
+  color: var(--white);
+  z-index: 10001;
+  /* Above the landing overlay (10000) */
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .scroll-line::after {
@@ -1159,8 +1162,8 @@ footer b {
   }
 
   .hero-scroll-wrapper {
-    height: 300vh !important;
-    /* Gave plenty of stasis after the effect concludes */
+    height: 220vh !important;
+    /* Reduced scroll depth as requested */
     position: relative;
   }
 
@@ -1329,7 +1332,13 @@ footer b {
   .panel {
     padding: 4rem 1.2rem;
   }
+}
 
+.nav-links a:first-child {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
   .hr {
     margin: 0 1.2rem;
   }
