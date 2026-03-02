@@ -442,19 +442,21 @@ nav {
 /* scroll indicator */
 .scroll-line {
   position: absolute;
-  bottom: 2.5rem;
-  /* Move to bottom instead of top */
+  top: 11rem;
+  /* Aligned below nav and with site margins */
+  left: 4rem;
   display: flex;
   align-items: center;
   gap: .9rem;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   letter-spacing: .18em;
-  left: 1rem;
   text-transform: uppercase;
   color: var(--white);
-  z-index: 10001;
-  /* Above the landing overlay (10000) */
+  z-index: 10005;
+  /* Above the landing overlay */
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transform: rotate(90deg);
+  transform-origin: left top;
 }
 
 .scroll-line::after {
